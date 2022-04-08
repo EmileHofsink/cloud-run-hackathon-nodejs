@@ -6,6 +6,7 @@ app.use(bodyParser.json());
 
 app.get("/", function (req, res) {
   res.send("Let the battle begin!");
+  res.sendStatus(200);
 });
 
 app.post("/", function (req, res) {
