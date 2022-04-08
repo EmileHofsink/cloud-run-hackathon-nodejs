@@ -11,11 +11,11 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   currentPlayers = req.body.arena;
   currentX =
-    req.body.arena.state["https://github-emilehofsink-cloud-run-hackathon-nodejs-2kxpytz2oa-uc.a.run.app"].x;
+    req.body.arena.state["https://test-2kxpytz2oa-uc.a.run.app"].x;
   currentY =
-    req.body.arena.state["https://github-emilehofsink-cloud-run-hackathon-nodejs-2kxpytz2oa-uc.a.run.app"].y;
+    req.body.arena.state["https://test-2kxpytz2oa-uc.a.run.app"].y;
   currentDirection =
-    req.body.arena.state["https://github-emilehofsink-cloud-run-hackathon-nodejs-2kxpytz2oa-uc.a.run.app"].direction;
+    req.body.arena.state["https://test-2kxpytz2oa-uc.a.run.app"].direction;
   
   move = "no moves loaded"
 
@@ -98,12 +98,12 @@ function faceSouth(currentDirection) {
 
 function findNTLocation(currentPlayers, currentX, currentY) {
   for (const [key, value] of Object.entries(currentPlayers.state)) {
-    if (((currentX - value.x) < 3) && ((currentX - value.x) > -3) && key != "https://github-emilehofsink-cloud-run-hackathon-nodejs-2kxpytz2oa-uc.a.run.app") {
+    if (((currentX - value.x) < 3) && ((currentX - value.x) > -3) && key != "https://test-2kxpytz2oa-uc.a.run.app") {
       x = value.x;
       y = value.y;
       return [x, y]
     }
-    else if (((currentY - value.y) < 3) && ((currentY - value.y) > -3) && key != "https://github-emilehofsink-cloud-run-hackathon-nodejs-2kxpytz2oa-uc.a.run.app") {
+    else if (((currentY - value.y) < 3) && ((currentY - value.y) > -3) && key != "https://test-2kxpytz2oa-uc.a.run.app") {
       x = value.x;
       y = value.y;
       return [x, y]
