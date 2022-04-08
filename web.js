@@ -11,46 +11,42 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   currentPlayers = req.body.arena;
   currentX =
-    req.body.arena.state["https://attitudepebbles-2kxpytz2oa-ts.a.run.app"].x;
+    req.body.arena.state["https://foo.com"].x;
   currentY =
-    req.body.arena.state["https://attitudepebbles-2kxpytz2oa-ts.a.run.app"].y;
+    req.body.arena.state["https://foo.com"].y;
   currentDirection =
-    req.body.arena.state["https://attitudepebbles-2kxpytz2oa-ts.a.run.app"]
-      .direction;
+    req.body.arena.state["https://foo.com"].direction;
+  
+  move = "no moves loaded"
 
-  moveNeeded = true;
+  enemyX = findNTLocation(currentPlayers, currentX, currentY)[0]
+  enemyY = findNTLocation(currentPlayers, currentX, currentY)[1]
 
-  if (currentDirection != "W" && currentX != 0) {
-    console.log("turn left for X");
-    moveNeeded = false;
-    move = faceLeft(currentDirection);
-  } else if (currentX != 0 && moveNeeded) {
-    console.log("move forward for x");
-    moveNeeded = false;
-    move = "F";
-  } else if (currentDirection != "N" && currentY != 0 && moveNeeded) {
-    console.log("face up for y");
-    moveNeeded = false;
-    move = faceUp(currentDirection);
-  } else if (currentY != 0 && moveNeeded) {
-    console.log("move forward for y");
-    moveNeeded = false;
-    move = "F";
-  } else if (currentDirection != "E" && currentDirection != "S" && moveNeeded) {
-    moveNeeded = true;
-    console.log("face east");
-    move = faceEast(currentDirection);
-  } else if (currentDirection == "E") {
-    moveNeeded = true;
-    console.log("check other players");
-    move = checkOtherPlayers(currentPlayers, currentDirection);
-  } else if (currentDirection == "S") {
-    moveNeeded = true;
-    console.log("check other players");
-    move = checkOtherPlayers(currentPlayers, currentDirection);
+  console.log(enemyX)
+  console.log(enemyY)
+
+  if (((currentX - enemyX) >= -3) && ((currentX - enemyX) <= -1) && currentDirection == "E") {
+    console.log("1")
+    move = "T";
+  } 
+  else if (((enemyX - currentX) >= -3) && ((enemyX - currentX) <= -1) && currentDirection == "W") {
+    console.log("2")
+    move = "T";
+  }
+  else if (((currentY - enemyY) >= -3) && ((currentY - enemyY) <= -1) && currentDirection == "S") {
+    console.log("3")
+    move = "T";
+  }
+  else if (((enemyX - currentX) >= -3) && ((enemyX - currentX) <= -1) && currentDirection == "N") {
+    console.log("4")
+    move = "T";
+  }
+  else {
+    console.log("5")
+    const moves = ['F', 'L', 'R'];
+    move = moves[Math.floor(Math.random() * moves.length)]
   }
 
-  console.log(move);
   res.send(move);
 });
 app.listen(process.env.PORT || 8080);
@@ -66,7 +62,7 @@ function faceEast(currentDirection) {
   }
 }
 
-function faceLeft(currentDirection) {
+function faceWest(currentDirection) {
   switch (currentDirection) {
     case "N":
       return "L";
@@ -77,7 +73,7 @@ function faceLeft(currentDirection) {
   }
 }
 
-function faceUp(currentDirection) {
+function faceNorth(currentDirection) {
   switch (currentDirection) {
     case "E":
       return "L";
@@ -88,20 +84,30 @@ function faceUp(currentDirection) {
   }
 }
 
-function checkOtherPlayers(currentPlayers, currentDirection) {
-  console.log(currentDirection);
-  for (const [key, value] of Object.entries(currentPlayers.state)) {
-    if (
-      ((value.x < 4 && value.y == 0 && currentDirection == "E") ||
-        (value.y < 4 && value.x == 0 && currentDirection == "S")) &&
-      key != "https://attitudepebbles-2kxpytz2oa-ts.a.run.app"
-    ) {
-      return "T";
-    }
-  }
-  if (currentDirection == "E") {
-    return "R";
-  } else {
-    return "L";
+function faceSouth(currentDirection) {
+  switch (currentDirection) {
+    case "E":
+      return "R";
+    case "W":
+      return "L";
+    case "N":
+      return "R";
   }
 }
+
+
+function findNTLocation(currentPlayers, currentX, currentY) {
+  for (const [key, value] of Object.entries(currentPlayers.state)) {
+    if (((currentX - value.x) < 3) && ((currentX - value.x) > -3) && key != "https://foo.com") {
+      x = value.x;
+      y = value.y;
+      return [x, y]
+    }
+    else if (((currentY - value.y) < 3) && ((currentY - value.y) > -3) && key != "https://foo.com") {
+      x = value.x;
+      y = value.y;
+      return [x, y]
+    }
+  }
+}
+
